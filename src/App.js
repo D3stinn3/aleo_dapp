@@ -157,7 +157,7 @@ function App() {
 
       {/* Footer Text */}
       <div style={{ marginTop: "20px", fontSize: "14px", color: "#777" }}>
-        <p>Powered by aleo & zk • Built for the Future</p>
+        <p>Powered by Aleo & ZKPass • Built for the Future</p>
       </div>
     </main>
     {/* Footer Component */}
