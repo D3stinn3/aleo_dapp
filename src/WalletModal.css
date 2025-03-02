@@ -50,10 +50,11 @@
 }
 
 /* Wallet options container */
+/* Wallet options container */
 .wallet-options {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns per row */
+    gap: 15px; /* Space between items */
 }
 
 /* Wallet option box */
@@ -65,6 +66,9 @@
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+    justify-content: center; /* Center items */
+    text-align: center;
+    flex-direction: column; /* Stack icon and text */
 }
 
 .wallet-option:hover {
@@ -74,9 +78,9 @@
 
 /* Wallet icons */
 .wallet-option img {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
+    width: 50px; /* Adjust icon size */
+    height: 50px;
+    margin-bottom: 8px; /* Space between icon and text */
 }
 
 /* Wallet name */

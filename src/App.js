@@ -11,6 +11,7 @@ import {
   configureConnectionForPuzzle
 } from 'aleo-adapters';
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function ConnectWalletButton() {
   const account = useAccount();
@@ -67,6 +68,19 @@ function ConnectWalletButton() {
       <button
         className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition shadow-md"
         onClick={handleClick}
+        style={{
+          backgroundColor: "#007bff",  // Blue color
+          color: "#fff",               // White text
+          padding: "10px 20px",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+          fontSize: "1rem",
+          fontWeight: "bold",
+          transition: "background-color 0.3s ease",
+      }}
+      onMouseOver={(e) => e.target.style.backgroundColor = "#007bff"}  // Hover effect
+      onMouseOut={(e) => e.target.style.backgroundColor = "#0056b3"}
       >
         {connected ? 'Disconnect Wallet' : 'Connect Wallet'}
       </button>
@@ -107,13 +121,50 @@ function App() {
 
   return (
     <WalletProvider wallets={wallets} autoConnect>
-      <div className="App bg-gray-50 min-h-screen">
-        <main className="container mx-auto py-10 flex flex-col items-center">
-          <h1 className="text-3xl font-semibold text-gray-900 mb-6">Welcome to Bu!lty Trees</h1>
-          <ConnectWalletButton />
-        </main>
+  <div
+    style={{
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      textAlign: "center",
+      background: "linear-gradient(135deg, #e0f7fa, #fce4ec)",
+      padding: "20px",
+      fontFamily: "'Arial', sans-serif"
+    }}
+  >
+    <Header/>
+    <main style={{ maxWidth: "600px", padding: "40px", background: "white", borderRadius: "10px", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}>
+      {/* Logo */}
+      <img 
+        src="/logo.png"  // Replace with actual logo path
+        alt="Logo"
+        style={{ width: "100px", height: "100px", marginBottom: "20px" }}
+      />
+
+      {/* Main Heading */}
+      <h1 style={{ fontSize: "32px", fontWeight: "bold", color: "#333", marginBottom: "10px" }}>
+        Welcome to <span style={{ color: "#007bff" }}>Bu!lty Trees</span>
+      </h1>
+
+      {/* Subtitle */}
+      <p style={{ fontSize: "18px", color: "#555", marginBottom: "20px" }}>
+        The family snapshot.
+      </p>
+
+      {/* Connect Wallet Button */}
+      <ConnectWalletButton />
+
+      {/* Footer Text */}
+      <div style={{ marginTop: "20px", fontSize: "14px", color: "#777" }}>
+        <p>Powered by aleo & zk • Built for the Future</p>
       </div>
-    </WalletProvider>
+    </main>
+    {/* Footer Component */}
+    <Footer />
+  </div>
+</WalletProvider>
+
   );
 }
 
