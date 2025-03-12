@@ -1,84 +1,93 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSelect, useAccount, useConnect, useDisconnect } from "aleo-hooks";
+import WalletModal from "./WalletModal";
+import "../App.css"; // Import styles
 
-const Header = () => {
+const ConnectWalletButton = () => {
+  const account = useAccount();
+  const { connect, connected } = useConnect();
+  const { disconnect } = useDisconnect();
+  const { select } = useSelect();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleWalletSelect = (walletId) => {
+    const walletAdapterMap = {
+      "leo-wallet": "Leo Wallet",
+      "puzzle-wallet": "Puzzle Wallet",
+      "fox-wallet": "Fox Wallet",
+      "soter-wallet": "Soter Wallet",
+    };
+
+    const adapterId = walletAdapterMap[walletId];
+
+    if (!adapterId) {
+      console.error(`Unsupported wallet ID: ${walletId}`);
+      return;
+    }
+
+    select(adapterId);
+    setIsModalOpen(false);
+
+    setTimeout(() => {
+      connect(adapterId);
+    }, 100);
+  };
+
+  const handleClick = () => {
+    if (account?.deleted) {
+      disconnect();
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
   return (
-    <header
-      style={{
-        width: "100%",
-        position: "fixed",
-        top: "0",
-        left: "0",
-        background: "white",
-        padding: "15px 30px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-        zIndex: "1000"
-      }}
-    >
-      {/* Logo on the Left */}
-      <div style={{ display: "flex", alignItems: "center", flex: "1" }}>
-        <img
-          src="/logo.png" // Replace with actual logo path
-          alt="Logo"
-          style={{ height: "40px", marginRight: "10px" }}
-        />
-        <span style={{ fontSize: "20px", fontWeight: "bold", color: "#333" }}>
-          Bu!lty Trees
-        </span>
-      </div>
+    <>
+      <button className="connect-button" onClick={handleClick}>
+        {connected ? "Disconnect Wallet" : "Connect Wallet"}
+      </button>
 
-      {/* Navigation Links in the Center */}
-      <nav style={{ flex: "2", display: "flex", justifyContent: "center" }}>
-        <ul
-          style={{
-            listStyle: "none",
-            display: "flex",
-            gap: "25px",
-            margin: "0",
-            padding: "0"
-          }}
-        >
-          <li><a href="#about" style={navLinkStyle}>About</a></li>
-          <li><a href="#features" style={navLinkStyle}>Features</a></li>
-          <li><a href="#roadmap" style={navLinkStyle}>Roadmap</a></li>
-          <li><a href="#contact" style={navLinkStyle}>Contact</a></li>
-        </ul>
-      </nav>
-
-      {/* Connect Wallet Button on the Right */}
-      <div style={{ flex: "1", display: "flex", justifyContent: "flex-end" }}>
-      <button
-          style={{
-            backgroundColor: "#007bff", // Green color
-            color: "#fff",
-            padding: "10px 15px",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            fontSize: "14px",
-            fontWeight: "bold",
-            transition: "background-color 0.3s ease",
-          }}
-          onMouseOver={(e) => e.target.style.backgroundColor = "#007bff"} // Darker green on hover
-          onMouseOut={(e) => e.target.style.backgroundColor = "#0056b3"}
-        >
-        Start Bu!lty Tree
-        </button>
-      </div>
-    </header>
+      <WalletModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onWalletSelect={handleWalletSelect}
+      />
+    </>
   );
 };
 
-// Inline style for navigation links
-const navLinkStyle = {
-  textDecoration: "none",
-  fontSize: "16px",
-  color: "#333",
-  fontWeight: "500",
-  transition: "color 0.3s ease",
-  cursor: "pointer"
+const Header = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <header className="header">
+      {/* Logo on the Left */}
+      <div className="logo">
+        <img src="/logo.png" alt="Logo" />
+        <span>Bu!lty Trees</span>
+      </div>
+
+      {/* Menu Button for Small Screens */}
+      <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)}>
+        ☰ Menu
+      </button>
+
+      {/* Navigation Links & Connect Wallet Button */}
+      <nav className={`nav ${menuOpen ? "open" : ""}`}>
+        <ul className="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        {/* Connect Wallet Button inside the dropdown */}
+        <div className="connect-button-container">
+          <ConnectWalletButton />
+        </div>
+      </nav>
+    </header>
+  );
 };
 
 export default Header;
